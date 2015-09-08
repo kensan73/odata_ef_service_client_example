@@ -1,0 +1,69 @@
+﻿<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
+  <edmx:DataServices m:DataServiceVersion="3.0" m:MaxDataServiceVersion="3.0" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
+    <Schema Namespace="ProductService.Models" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <EntityType Name="Product">
+        <Key>
+          <PropertyRef Name="ID" />
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Name" Type="Edm.String" />
+        <Property Name="Price" Type="Edm.Decimal" Nullable="false" />
+        <Property Name="Category" Type="Edm.String" />
+        <Property Name="SupplierId" Type="Edm.String" />
+        <NavigationProperty Name="Supplier" Relationship="ProductService.Models.ProductService_Models_Product_Supplier_ProductService_Models_Supplier_SupplierPartner" ToRole="Supplier" FromRole="SupplierPartner" />
+        <NavigationProperty Name="Ratings" Relationship="ProductService.Models.ProductService_Models_Product_Ratings_ProductService_Models_ProductRating_RatingsPartner" ToRole="Ratings" FromRole="RatingsPartner" />
+      </EntityType>
+      <EntityType Name="Supplier">
+        <Key>
+          <PropertyRef Name="Key" />
+        </Key>
+        <Property Name="Key" Type="Edm.String" Nullable="false" />
+        <Property Name="Name" Type="Edm.String" />
+      </EntityType>
+      <EntityType Name="ProductRating">
+        <Key>
+          <PropertyRef Name="ID" />
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false" />
+        <Property Name="ProductID" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Rating" Type="Edm.Int32" Nullable="false" />
+        <NavigationProperty Name="Product" Relationship="ProductService.Models.ProductService_Models_ProductRating_Product_ProductService_Models_Product_ProductPartner" ToRole="Product" FromRole="ProductPartner" />
+      </EntityType>
+      <Association Name="ProductService_Models_Product_Supplier_ProductService_Models_Supplier_SupplierPartner">
+        <End Type="ProductService.Models.Supplier" Role="Supplier" Multiplicity="0..1" />
+        <End Type="ProductService.Models.Product" Role="SupplierPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="ProductService_Models_Product_Ratings_ProductService_Models_ProductRating_RatingsPartner">
+        <End Type="ProductService.Models.ProductRating" Role="Ratings" Multiplicity="*" />
+        <End Type="ProductService.Models.Product" Role="RatingsPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="ProductService_Models_ProductRating_Product_ProductService_Models_Product_ProductPartner">
+        <End Type="ProductService.Models.Product" Role="Product" Multiplicity="0..1" />
+        <End Type="ProductService.Models.ProductRating" Role="ProductPartner" Multiplicity="0..1" />
+      </Association>
+    </Schema>
+    <Schema Namespace="Default" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <EntityContainer Name="Container" m:IsDefaultEntityContainer="true">
+        <EntitySet Name="Products" EntityType="ProductService.Models.Product" />
+        <EntitySet Name="Suppliers" EntityType="ProductService.Models.Supplier" />
+        <EntitySet Name="Ratings" EntityType="ProductService.Models.ProductRating" />
+        <FunctionImport Name="RateProduct" ReturnType="Edm.Double" IsBindable="true" m:IsAlwaysBindable="true">
+          <Parameter Name="bindingParameter" Type="ProductService.Models.Product" />
+          <Parameter Name="Rating" Type="Edm.Int32" Nullable="false" />
+        </FunctionImport>
+        <AssociationSet Name="ProductService_Models_Product_Supplier_ProductService_Models_Supplier_SupplierPartnerSet" Association="ProductService.Models.ProductService_Models_Product_Supplier_ProductService_Models_Supplier_SupplierPartner">
+          <End Role="SupplierPartner" EntitySet="Products" />
+          <End Role="Supplier" EntitySet="Suppliers" />
+        </AssociationSet>
+        <AssociationSet Name="ProductService_Models_Product_Ratings_ProductService_Models_ProductRating_RatingsPartnerSet" Association="ProductService.Models.ProductService_Models_Product_Ratings_ProductService_Models_ProductRating_RatingsPartner">
+          <End Role="RatingsPartner" EntitySet="Products" />
+          <End Role="Ratings" EntitySet="Ratings" />
+        </AssociationSet>
+        <AssociationSet Name="ProductService_Models_ProductRating_Product_ProductService_Models_Product_ProductPartnerSet" Association="ProductService.Models.ProductService_Models_ProductRating_Product_ProductService_Models_Product_ProductPartner">
+          <End Role="ProductPartner" EntitySet="Ratings" />
+          <End Role="Product" EntitySet="Products" />
+        </AssociationSet>
+      </EntityContainer>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>
